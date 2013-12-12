@@ -4,7 +4,6 @@
  */
 
 #include "Stone.h"
-#include "utils.h"
 
 Stone::Stone(Point2D _center, double _radius) : center(_center), radius(_radius) { }
 
@@ -13,14 +12,14 @@ Stone::Stone(double x, double y, double _r) : center { x, y }, radius(_r) { }
 Stone::~Stone() { }
 
 void Stone::Draw(){
-	Point3D tmp = UnProj(center);
+	Point3D tmp = GLutils::UnProject(center);
 
 	float theta = 2 * 3.1415926 / 360.0f;
 	float c = cosf(theta);
 	float s = sinf(theta);
 	float t;
 
-	float x = UnProj({ center.x + radius, 0}).x - tmp.x;
+	float x = GLutils::UnProject({ center.x + radius, 0}).x - tmp.x;
 	float y = 0;
 
 	if (isSet) {

@@ -10,11 +10,9 @@
 #include <cmath>
 #include "GameObject.h"
 
-typedef void (*EventCallback)(GameObject* sender);
-
 class Stone : public GameObject {
 public:
-	enum Type { Empty, White, Black=-1 };
+	enum Type { Black=-1, Empty, White };
 
 	Stone(Point2D, double);
 	Stone(double, double, double);
