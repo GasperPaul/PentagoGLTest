@@ -3,32 +3,36 @@
  *      Author: Gasper
  */
 
-#ifndef CALLBACKS_H
-#define CALLBACKS_H
+#ifndef CONTROLS_H
+#define CONTROLS_H
 
 #include <GLFW/glfw3.h>
 #include <iostream>
-using namespace std;
 
 #include "Stone.h"
 
-enum GameMode { MainMenu, PlayerStep, OponentStep };
-GameMode gameMode;
+enum GameMode { MainMenu, PlayerStep, Rotation, OponentStep };
+static GameMode gameMode;
 
-Point3D translate = { 0, 0, 0 };
-Point2D oldPos;
-tcursor cursor;
-std::vector<GameObject*> objects;
-std::vector<GameObject*> menuButtons;
+static Point3D translate = { 0, 0, 0 };
+static Point2D oldPos;
+static tcursor cursor;
+static std::vector<GameObject*> stones;
+static std::vector<GameObject*> menuButtons;
+static std::vector<GameObject*> rotationButtons;
+
+class Controls {
+public:
 
 static void errorCallback(int error, const char* errorText) {
-	cout << "Error: " << errorText << endl;
+	std::cout << "Error: " << errorText << std::endl;
 }
 
 static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	switch(key){
 	case GLFW_KEY_ESCAPE:
-		glfwSetWindowShouldClose(window, 1);
+		if (gameMode == MainMenu) glfwSetWindowShouldClose(window, 1);
+		else gameMode = MainMenu;
 		break;
 	}
 }
@@ -39,7 +43,7 @@ static void GameMouseCallback(GLFWwindow* window, int button, int action, int mo
 		switch(action) {
 		case GLFW_PRESS:
 			glfwGetCursorPos(window, &cursor.position.x, &cursor.position.y);
-			for(GameObject* obj : gameMode == MainMenu ? menuButtons : objects)
+			for(GameObject* obj : gameMode == MainMenu ? menuButtons : (gameMode==Rotation? rotationButtons :stones))
 				obj->Clicked(cursor.position);
 			break;
 		}
@@ -55,4 +59,6 @@ static void mouseMoveCallback(GLFWwindow* window, double x, double y) {
 	}
 }
 
-#endif /* CALLBACKS_H */
+};
+
+#endif /* CONTROLS_H */
